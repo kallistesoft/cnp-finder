@@ -1,0 +1,35 @@
+name: Deploy to GoDaddy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The pages are generated, not committed; check.mjs fails the run if a
+      # code is unreachable, a link is dead or a label is missing.
+      - run: node tools/build.mjs
+      - run: node tools/check.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    uses: kallistesoft/kallistesoft-site/.github/workflows/deploy-ftp.yml@main
+    with:
+      folder: cnp.kallistesoft.ca
+    secrets: inherit

@@ -1,0 +1,952 @@
+{
+  "domains": {
+    "0": {
+      "icon": "🏛️",
+      "fr": "Haute direction ou élu politique",
+      "en": "Top executive or elected official",
+      "hint_fr": "PDG, vice-président, sous-ministre, député",
+      "hint_en": "CEO, vice-president, deputy minister, MP"
+    },
+    "1": {
+      "icon": "💼",
+      "fr": "Bureau, finance et administration",
+      "en": "Office, finance and administration",
+      "hint_fr": "comptable, adjoint administratif, ressources humaines",
+      "hint_en": "accountant, administrative assistant, human resources"
+    },
+    "2": {
+      "icon": "🔬",
+      "fr": "Sciences, ingénierie et informatique",
+      "en": "Science, engineering and IT",
+      "hint_fr": "ingénieur, développeur, technicien de laboratoire",
+      "hint_en": "engineer, developer, lab technician"
+    },
+    "3": {
+      "icon": "🩺",
+      "fr": "Santé",
+      "en": "Health care",
+      "hint_fr": "infirmière, médecin, préposé aux bénéficiaires",
+      "hint_en": "nurse, doctor, personal support worker"
+    },
+    "4": {
+      "icon": "🎓",
+      "fr": "Enseignement, droit, services sociaux et sécurité publique",
+      "en": "Education, law, social services and public safety",
+      "hint_fr": "enseignant, avocat, travailleur social, policier, gardienne d'enfants",
+      "hint_en": "teacher, lawyer, social worker, police officer, nanny"
+    },
+    "5": {
+      "icon": "🎨",
+      "fr": "Arts, culture, sports et loisirs",
+      "en": "Arts, culture, sports and recreation",
+      "hint_fr": "graphiste, journaliste, musicien, entraîneur",
+      "hint_en": "graphic designer, journalist, musician, coach"
+    },
+    "6": {
+      "icon": "🛒",
+      "fr": "Vente, restauration et services aux clients",
+      "en": "Sales, food service and customer service",
+      "hint_fr": "vendeur, caissier, cuisinier, serveur, coiffeur",
+      "hint_en": "salesperson, cashier, cook, server, hairstylist"
+    },
+    "7": {
+      "icon": "🔧",
+      "fr": "Métiers, construction, mécanique et transport",
+      "en": "Trades, construction, mechanics and transport",
+      "hint_fr": "électricien, plombier, mécanicien, chauffeur de camion",
+      "hint_en": "electrician, plumber, mechanic, truck driver"
+    },
+    "8": {
+      "icon": "🌾",
+      "fr": "Agriculture, forêts, mines et pêche",
+      "en": "Farming, forestry, mining and fishing",
+      "hint_fr": "ouvrier agricole, bûcheron, mineur, pêcheur",
+      "hint_en": "farm worker, logger, miner, fisher"
+    },
+    "9": {
+      "icon": "🏭",
+      "fr": "Usine, fabrication et services publics (eau, électricité)",
+      "en": "Factory, manufacturing and utilities (water, power)",
+      "hint_fr": "opérateur de machine, assembleur, contremaître d'usine",
+      "hint_en": "machine operator, assembler, plant supervisor"
+    }
+  },
+  "teer": {
+    "0": {
+      "fr": "Je suis gestionnaire : je dirige un service, une équipe de cadres ou une entreprise",
+      "en": "I am a manager: I run a department, a team of supervisors or a business",
+      "short_fr": "Gestionnaire",
+      "short_en": "Manager"
+    },
+    "1": {
+      "fr": "Mon poste demande un diplôme universitaire (licence, baccalauréat, master…)",
+      "en": "My job requires a university degree (bachelor's, master's…)",
+      "short_fr": "Diplôme universitaire",
+      "short_en": "University degree"
+    },
+    "2": {
+      "fr": "Mon poste demande un diplôme technique de 2 ans ou plus, un apprentissage de 2 ans ou plus, ou je supervise une équipe",
+      "en": "My job requires a 2-year (or longer) college diploma or apprenticeship, or I supervise a team",
+      "short_fr": "Diplôme de 2 ans et plus ou supervision",
+      "short_en": "2+ year diploma or supervisor"
+    },
+    "3": {
+      "fr": "Mon poste demande une formation technique de moins de 2 ans, un apprentissage court ou plus de 6 mois de formation au travail",
+      "en": "My job requires a college program under 2 years, a short apprenticeship or over 6 months of on-the-job training",
+      "short_fr": "Formation de moins de 2 ans",
+      "short_en": "Under 2 years of training"
+    },
+    "4": {
+      "fr": "Mon poste demande un diplôme d'études secondaires (lycée) ou quelques semaines de formation au travail",
+      "en": "My job requires a high school diploma or a few weeks of on-the-job training",
+      "short_fr": "Secondaire ou quelques semaines de formation",
+      "short_en": "High school or a few weeks of training"
+    },
+    "5": {
+      "fr": "Aucun diplôme exigé : on m'a montré le travail en quelques jours",
+      "en": "No diploma needed: I was shown how to do the job in a few days",
+      "short_fr": "Sans diplôme",
+      "short_en": "No diploma"
+    }
+  },
+  "groups": {
+    "1001": [
+      "Je dirige un service : finances, ressources humaines, achats…",
+      "I run a department: finance, human resources, purchasing…"
+    ],
+    "1002": [
+      "Je dirige dans la banque, l'assurance, l'immobilier, le marketing…",
+      "I manage in banking, insurance, real estate, marketing…"
+    ],
+    "111": [
+      "Comptabilité, audit, finance et placements",
+      "Accounting, auditing, finance and investments"
+    ],
+    "112": [
+      "Ressources humaines, conseil en gestion, marketing",
+      "Human resources, management consulting, marketing"
+    ],
+    "120": [
+      "Je supervise des employés de bureau",
+      "I supervise office staff"
+    ],
+    "121": [
+      "Assistanat de direction, recrutement, achats, événements…",
+      "Executive assistance, recruiting, purchasing, events…"
+    ],
+    "1210": [
+      "Assistant de direction, agent RH, acheteur, organisateur d'événements",
+      "Executive assistant, HR officer, buyer, event planner"
+    ],
+    "1211": [
+      "Transcription, archives et dossiers, statistiques",
+      "Transcription, records and files, statistics"
+    ],
+    "122": [
+      "Tenue de livres, assurances (sinistres, souscription), évaluation",
+      "Bookkeeping, insurance (claims, underwriting), appraisal"
+    ],
+    "131": [
+      "Administration de bureau, gestion d'immeubles, paie, secrétariat",
+      "Office administration, property management, payroll, secretarial work"
+    ],
+    "1310": [
+      "Agent administratif, gestionnaire immobilier, responsable de la paie",
+      "Administrative officer, property administrator, payroll administrator"
+    ],
+    "1311": [
+      "Adjoint administratif ou secrétaire (général, juridique, médical)",
+      "Administrative assistant or secretary (general, legal, medical)"
+    ],
+    "132": [
+      "Logistique de transport, courtage en douane",
+      "Transport logistics, customs brokerage"
+    ],
+    "141": [
+      "Employé de bureau, réception, saisie de données",
+      "Office clerk, reception, data entry"
+    ],
+    "1410": [
+      "Employé de bureau, réceptionniste, greffe du tribunal",
+      "Office clerk, receptionist, court clerk"
+    ],
+    "1411": [
+      "Saisie de données, sondages, mise en page",
+      "Data entry, surveys, desktop publishing"
+    ],
+    "142": [
+      "Commis en comptabilité, banque, assurance, recouvrement",
+      "Accounting, banking, insurance or collection clerk"
+    ],
+    "143": [
+      "Bibliothèque, courrier et correspondance",
+      "Library, mail and correspondence"
+    ],
+    "144": [
+      "Entrepôt, expédition, inventaire, répartition",
+      "Warehouse, shipping, inventory, dispatching"
+    ],
+    "211": [
+      "Sciences : physique, chimie, géologie, biologie, forêts, agronomie",
+      "Science: physics, chemistry, geology, biology, forestry, agronomy"
+    ],
+    "2110": [
+      "Physique, chimie, géologie, météo",
+      "Physics, chemistry, geology, weather"
+    ],
+    "2111": [
+      "Biologie, forêts, agronomie",
+      "Biology, forestry, agronomy"
+    ],
+    "212": [
+      "Informatique, architecture, urbanisme, mathématiques, données",
+      "Computing, architecture, urban planning, mathematics, data"
+    ],
+    "2120": [
+      "Architecture, urbanisme, arpentage",
+      "Architecture, urban planning, land surveying"
+    ],
+    "2121": [
+      "Mathématiques, statistiques, actuariat, science des données",
+      "Mathematics, statistics, actuarial science, data science"
+    ],
+    "2122": [
+      "Cybersécurité, analyse de systèmes, bases de données",
+      "Cybersecurity, systems analysis, databases"
+    ],
+    "2123": [
+      "Développement de logiciels, programmation, Web",
+      "Software development, programming, Web"
+    ],
+    "213": [
+      "Ingénieur (génie civil, mécanique, électrique, etc.)",
+      "Engineer (civil, mechanical, electrical, etc.)"
+    ],
+    "2130": [
+      "Génie civil ou mécanique",
+      "Civil or mechanical engineering"
+    ],
+    "2131": [
+      "Génie électrique, électronique ou informatique (matériel)",
+      "Electrical, electronics or computer (hardware) engineering"
+    ],
+    "2132": [
+      "Génie chimique, industriel, des matériaux",
+      "Chemical, industrial or materials engineering"
+    ],
+    "2133": [
+      "Génie minier, géologique ou pétrolier",
+      "Mining, geological or petroleum engineering"
+    ],
+    "2139": [
+      "Génie aérospatial et autres ingénieurs",
+      "Aerospace and other engineering"
+    ],
+    "221": [
+      "Technicien en chimie, géologie, biologie, forêts, environnement",
+      "Technician in chemistry, geology, biology, forestry, environment"
+    ],
+    "2210": [
+      "Technicien en chimie ou en géologie",
+      "Chemistry or geology technician"
+    ],
+    "2211": [
+      "Technicien en biologie, agriculture, forêts, horticulture, agent de la faune",
+      "Biology, agriculture, forestry or horticulture technician, wildlife officer"
+    ],
+    "222": [
+      "Technicien en informatique, dessin, architecture, inspection",
+      "Technician in IT, drafting, architecture, inspection"
+    ],
+    "2221": [
+      "Dessin technique, architecture, arpentage, design industriel",
+      "Drafting, architecture, surveying, industrial design"
+    ],
+    "2222": [
+      "Soutien informatique, réseaux, tests de logiciels",
+      "IT support, networks, software testing"
+    ],
+    "2223": [
+      "Inspection technique, santé et sécurité au travail",
+      "Technical inspection, workplace health and safety"
+    ],
+    "223": [
+      "Technicien en génie (civil, mécanique, électrique, électronique)",
+      "Engineering technician (civil, mechanical, electrical, electronics)"
+    ],
+    "2230": [
+      "Génie civil, mécanique ou industriel, estimation de construction",
+      "Civil, mechanical or industrial engineering, construction estimating"
+    ],
+    "2231": [
+      "Électricité, électronique, instruments, avionique",
+      "Electrical, electronics, instruments, avionics"
+    ],
+    "311": [
+      "Médecin, dentiste, pharmacien, vétérinaire…",
+      "Doctor, dentist, pharmacist, veterinarian…"
+    ],
+    "3110": [
+      "Médecin ou vétérinaire",
+      "Doctor or veterinarian"
+    ],
+    "3111": [
+      "Dentiste, optométriste, audiologiste, orthophoniste",
+      "Dentist, optometrist, audiologist, speech therapist"
+    ],
+    "3112": [
+      "Pharmacien ou diététiste",
+      "Pharmacist or dietitian"
+    ],
+    "312": [
+      "Psychologue, physiothérapeute, ergothérapeute, chiropraticien",
+      "Psychologist, physiotherapist, occupational therapist, chiropractor"
+    ],
+    "313": [
+      "Infirmière, infirmière praticienne, sage-femme",
+      "Nurse, nurse practitioner, midwife"
+    ],
+    "321": [
+      "Technicien de santé : laboratoire, radiologie, dentaire, ambulancier…",
+      "Health technician: lab, X-ray, dental, paramedic…"
+    ],
+    "3210": [
+      "Infirmière auxiliaire, ambulancier, opticien, inhalothérapeute",
+      "Practical nurse, paramedic, optician, respiratory therapist"
+    ],
+    "3211": [
+      "Hygiéniste dentaire, denturologiste, technicien dentaire",
+      "Dental hygienist, denturist, dental technician"
+    ],
+    "3212": [
+      "Laboratoire médical, radiologie, échographie, technicien en pharmacie",
+      "Medical lab, X-ray, ultrasound, pharmacy technician"
+    ],
+    "322": [
+      "Massothérapie, acupuncture, médecines douces",
+      "Massage therapy, acupuncture, natural healing"
+    ],
+    "4001": [
+      "Gestionnaire dans la fonction publique",
+      "Manager in government"
+    ],
+    "4002": [
+      "Direction d'école, de collège ou d'université",
+      "Head of a school, college or university"
+    ],
+    "4004": [
+      "Officier de police, chef pompier, officier des Forces armées",
+      "Police officer (commissioned), fire chief, Armed Forces officer"
+    ],
+    "411": [
+      "Juge, avocat, notaire",
+      "Judge, lawyer, notary"
+    ],
+    "412": [
+      "Enseignant ou professeur",
+      "Teacher or professor"
+    ],
+    "4120": [
+      "Université ou études supérieures",
+      "University or post-secondary"
+    ],
+    "4122": [
+      "École secondaire, primaire ou maternelle",
+      "Secondary, elementary or kindergarten"
+    ],
+    "413": [
+      "Travail social, conseil, religion, enquêtes policières",
+      "Social work, counselling, religion, police investigation"
+    ],
+    "4130": [
+      "Travailleur social, thérapeute, conseiller, ministre du culte",
+      "Social worker, therapist, counsellor, religious leader"
+    ],
+    "4131": [
+      "Enquêteur de police, agent de probation",
+      "Police investigator, probation officer"
+    ],
+    "4132": [
+      "Conseiller d'orientation ou en emploi",
+      "Educational or career counsellor"
+    ],
+    "414": [
+      "Recherche, politiques et programmes (économie, santé, éducation…)",
+      "Research, policy and programs (economics, health, education…)"
+    ],
+    "421": [
+      "Policier, pompier, militaire spécialisé",
+      "Police officer, firefighter, specialized military"
+    ],
+    "422": [
+      "Parajuriste, intervenant social, éducatrice de la petite enfance",
+      "Paralegal, social or community worker, early childhood educator"
+    ],
+    "431": [
+      "Aide-enseignant, instructeur (conduite, langues…)",
+      "Teacher assistant, instructor (driving, languages…)"
+    ],
+    "432": [
+      "Agent correctionnel, agent des services frontaliers, huissier",
+      "Correctional officer, border services officer, bailiff"
+    ],
+    "441": [
+      "Gardienne d'enfants, aide familiale, soins à domicile",
+      "Nanny, caregiver, home support worker"
+    ],
+    "5110": [
+      "Bibliothécaire, archiviste, conservateur de musée",
+      "Librarian, archivist, museum curator"
+    ],
+    "5111": [
+      "Rédaction, journalisme, traduction, interprétation",
+      "Writing, journalism, translation, interpretation"
+    ],
+    "5112": [
+      "Réalisateur, producteur, musicien, chanteur, compositeur",
+      "Director, producer, musician, singer, composer"
+    ],
+    "5211": [
+      "Cinéma, radio, télévision, scène, animation",
+      "Film, radio, TV, stage, broadcasting"
+    ],
+    "5212": [
+      "Graphiste, illustrateur, designer d'intérieur",
+      "Graphic designer, illustrator, interior designer"
+    ],
+    "531": [
+      "Photographe, artiste, danseur, acteur, artisan",
+      "Photographer, artist, dancer, actor, craftsperson"
+    ],
+    "5311": [
+      "Photographe, assistant de tournage ou de scène",
+      "Photographer, film or stage assistant"
+    ],
+    "5312": [
+      "Danseur, acteur, peintre, sculpteur, designer de mode, artisan",
+      "Dancer, actor, painter, sculptor, fashion designer, craftsperson"
+    ],
+    "532": [
+      "Athlète, entraîneur, arbitre",
+      "Athlete, coach, referee"
+    ],
+    "6003": [
+      "Gérant de restaurant ou d'hôtel",
+      "Restaurant or hotel manager"
+    ],
+    "620": [
+      "Je supervise une équipe en magasin, restaurant, hôtel, nettoyage…",
+      "I supervise a team in a store, restaurant, hotel, cleaning…"
+    ],
+    "6202": [
+      "Restaurant, hôtel, centre d'appels, nettoyage et autres services",
+      "Restaurant, hotel, call centre, cleaning and other services"
+    ],
+    "621": [
+      "Vente technique en gros, acheteur pour magasins",
+      "Technical wholesale sales, retail buyer"
+    ],
+    "622": [
+      "Chef cuisinier, directeur funéraire, bijoutier",
+      "Chef, funeral director, jeweller"
+    ],
+    "631": [
+      "Assurance, immobilier, vente de produits financiers",
+      "Insurance, real estate, financial sales"
+    ],
+    "632": [
+      "Cuisinier, boucher, boulanger, coiffeur, esthéticienne…",
+      "Cook, butcher, baker, hairstylist, esthetician…"
+    ],
+    "6320": [
+      "Cuisinier, boucher, boulanger-pâtissier",
+      "Cook, butcher, baker"
+    ],
+    "6321": [
+      "Coiffeur, barbier, esthéticienne",
+      "Hairstylist, barber, esthetician"
+    ],
+    "6322": [
+      "Cordonnier, tapissier",
+      "Shoe repairer, upholsterer"
+    ],
+    "641": [
+      "Vendeur en magasin, représentant commercial",
+      "Store salesperson, sales representative"
+    ],
+    "642": [
+      "Couturier, tailleur, conseiller en image",
+      "Tailor, dressmaker, image consultant"
+    ],
+    "643": [
+      "Restaurant, bar, voyage, hôtel, tourisme",
+      "Restaurant, bar, travel, hotel, tourism"
+    ],
+    "6430": [
+      "Maître d'hôtel, hôte d'accueil, barman",
+      "Maître d'hôtel, host, bartender"
+    ],
+    "6431": [
+      "Agent de voyages, agent de bord, réception d'hôtel, billetterie",
+      "Travel agent, flight attendant, hotel front desk, ticket agent"
+    ],
+    "6432": [
+      "Guide touristique, casino, guide de plein air",
+      "Tour guide, casino worker, outdoor guide"
+    ],
+    "644": [
+      "Service à la clientèle, centre d'appels, agent de sécurité",
+      "Customer service, call centre, security guard"
+    ],
+    "6440": [
+      "Service à la clientèle (banque, poste, centre d'appels…)",
+      "Customer service (bank, post office, call centre…)"
+    ],
+    "651": [
+      "Caissier, pompiste, mise en rayon",
+      "Cashier, gas station attendant, shelf stocker"
+    ],
+    "652": [
+      "Serveur, aide de cuisine, préposé en hôtel ou loisirs, soins aux animaux",
+      "Server, kitchen helper, hotel or recreation attendant, animal care"
+    ],
+    "6520": [
+      "Serveur, aide de cuisine, comptoir, découpe de viande ou poisson",
+      "Server, kitchen helper, food counter, meat or fish cutter"
+    ],
+    "6521": [
+      "Préposé en hôtel, voyage, parc d'attractions ou centre sportif",
+      "Hotel, travel, amusement park or sports centre attendant"
+    ],
+    "6522": [
+      "Toilettage et soins aux animaux, autres services personnels",
+      "Pet grooming and animal care, other personal services"
+    ],
+    "653": [
+      "Nettoyage, entretien ménager, buanderie",
+      "Cleaning, housekeeping, laundry"
+    ],
+    "6531": [
+      "Nettoyage, entretien ménager, concierge",
+      "Cleaning, housekeeping, janitor"
+    ],
+    "6532": [
+      "Nettoyage à sec, buanderie, autres services de soutien",
+      "Dry cleaning, laundry, other support services"
+    ],
+    "7001": [
+      "Construction, rénovation, entretien d'immeubles",
+      "Construction, renovation, building maintenance"
+    ],
+    "7002": [
+      "Transport, poste et messagerie",
+      "Transportation, postal and courier services"
+    ],
+    "720": [
+      "Je suis entrepreneur ou contremaître d'une équipe de métier",
+      "I am a contractor or foreman of a trades crew"
+    ],
+    "7201": [
+      "Construction, électricité, plomberie, menuiserie, métal",
+      "Construction, electrical, plumbing, carpentry, metal"
+    ],
+    "7202": [
+      "Mécanique, machinerie lourde, transport, imprimerie, courrier",
+      "Mechanics, heavy equipment, transport, printing, mail"
+    ],
+    "721": [
+      "Machiniste, tôlier, soudeur, monteur de charpente métallique",
+      "Machinist, sheet metal worker, welder, ironworker"
+    ],
+    "722": [
+      "Électricien, monteur de lignes électriques ou de télécom",
+      "Electrician, power line or telecom line worker"
+    ],
+    "723": [
+      "Plombier, charpentier-menuisier, ébéniste, maçon",
+      "Plumber, carpenter, cabinetmaker, bricklayer"
+    ],
+    "7230": [
+      "Plombier, tuyauteur, monteur d'installations au gaz",
+      "Plumber, pipefitter, gas fitter"
+    ],
+    "7231": [
+      "Charpentier-menuisier, ébéniste",
+      "Carpenter, cabinetmaker"
+    ],
+    "7232": [
+      "Maçon, briqueteur, calorifugeur",
+      "Bricklayer, mason, insulator"
+    ],
+    "724": [
+      "Mécanicien (auto, camion, machinerie, avion, chauffage…)",
+      "Mechanic (car, truck, machinery, aircraft, heating…)"
+    ],
+    "7240": [
+      "Mécanicien industriel, machinerie lourde, climatisation, avions, trains",
+      "Industrial, heavy equipment, HVAC, aircraft or rail mechanic"
+    ],
+    "7241": [
+      "Mécanicien automobile, camion, carrossier",
+      "Car or truck mechanic, auto body technician"
+    ],
+    "7242": [
+      "Électroménagers, petits moteurs, motos, chauffage au mazout",
+      "Appliances, small engines, motorcycles, oil heating"
+    ],
+    "725": [
+      "Grutier, foreur de puits d'eau",
+      "Crane operator, water well driller"
+    ],
+    "726": [
+      "Pilote, contrôleur aérien, officier de navire",
+      "Pilot, air traffic controller, ship's officer"
+    ],
+    "731": [
+      "Finition de béton, carrelage, toiture, peinture, revêtement de sol…",
+      "Concrete finishing, tiling, roofing, painting, flooring…"
+    ],
+    "7310": [
+      "Béton, carrelage, plâtre et cloisons sèches",
+      "Concrete, tiling, plaster and drywall"
+    ],
+    "7311": [
+      "Toiture, vitrerie, peinture en bâtiment, revêtements de sol",
+      "Roofing, glazing, house painting, floor covering"
+    ],
+    "732": [
+      "Installation et entretien d'équipements, concierge d'immeuble, extermination",
+      "Equipment installation and servicing, building superintendent, pest control"
+    ],
+    "733": [
+      "Chauffeur de camion, d'autobus, conducteur de train",
+      "Truck driver, bus driver, train engineer"
+    ],
+    "7330": [
+      "Chauffeur de camion ou d'autobus, conducteur de métro",
+      "Truck or bus driver, subway operator"
+    ],
+    "7331": [
+      "Conducteur de locomotive, chef de train",
+      "Locomotive engineer, train conductor"
+    ],
+    "734": [
+      "Conducteur d'engins lourds, imprimeur, foreur-dynamiteur",
+      "Heavy equipment operator, printing press operator, driller-blaster"
+    ],
+    "741": [
+      "Tri du courrier, facteur, coursier",
+      "Mail sorter, letter carrier, courier"
+    ],
+    "742": [
+      "Entretien de voies ferrées, matelot, aéroport, pose de pièces auto",
+      "Railway track maintenance, deckhand, airport ramp, auto parts installer"
+    ],
+    "751": [
+      "Manutentionnaire, débardeur, aide ou manœuvre de chantier",
+      "Material handler, longshore worker, construction helper or labourer"
+    ],
+    "7510": [
+      "Manutentionnaire, débardeur",
+      "Material handler, longshore worker"
+    ],
+    "7511": [
+      "Aide ou manœuvre sur un chantier ou dans un métier",
+      "Helper or labourer on a site or in a trade"
+    ],
+    "752": [
+      "Chauffeur de taxi ou de livraison, traversier, voirie",
+      "Taxi or delivery driver, ferry, public works"
+    ],
+    "7520": [
+      "Chauffeur de taxi, de limousine ou de livraison",
+      "Taxi, limousine or delivery driver"
+    ],
+    "7521": [
+      "Traversier, manœuvre ferroviaire ou de voirie",
+      "Ferry operator, rail or public works labourer"
+    ],
+    "8002": [
+      "Exploitant agricole, horticole ou aquacole",
+      "Farm, horticulture or aquaculture manager"
+    ],
+    "8202": [
+      "Contremaître dans les mines, le pétrole ou le gaz",
+      "Supervisor in mining, oil or gas"
+    ],
+    "8203": [
+      "Contremaître agricole ou en aménagement paysager",
+      "Farm or landscaping supervisor"
+    ],
+    "8310": [
+      "Mineur sous terre, foreur de puits de pétrole ou de gaz",
+      "Underground miner, oil or gas well driller"
+    ],
+    "8312": [
+      "Capitaine de pêche, pêcheur",
+      "Fishing master, fisher"
+    ],
+    "8410": [
+      "Travailleur dans une mine ou sur un forage pétrolier",
+      "Mine or oil drilling worker"
+    ],
+    "8411": [
+      "Abattage d'arbres, sylviculture",
+      "Tree felling, silviculture"
+    ],
+    "8412": [
+      "Ouvrier d'élevage, conducteur de machinerie agricole, matelot de pêche",
+      "Livestock worker, farm machinery operator, fishing deckhand"
+    ],
+    "8510": [
+      "Ouvrier agricole, récolte, serres, aquaculture",
+      "Farm labourer, harvesting, greenhouse, aquaculture"
+    ],
+    "8511": [
+      "Manœuvre dans une mine ou sur un forage",
+      "Mine or drilling labourer"
+    ],
+    "8512": [
+      "Manœuvre forestier, entretien de terrains et paysagement",
+      "Forestry labourer, grounds maintenance and landscaping"
+    ],
+    "920": [
+      "Contremaître ou surveillant dans une usine",
+      "Supervisor or foreman in a factory"
+    ],
+    "9201": [
+      "Transformation : métaux, chimie, aliments, plastique, bois, textile",
+      "Processing: metal, chemicals, food, plastics, wood, textiles"
+    ],
+    "9202": [
+      "Montage : automobiles, électronique, meubles, produits métalliques",
+      "Assembly: cars, electronics, furniture, metal products"
+    ],
+    "921": [
+      "Centrale électrique, traitement de l'eau ou des déchets",
+      "Power plant, water or waste treatment"
+    ],
+    "931": [
+      "Salle de contrôle d'usine (métaux, pétrole, chimie, papier)",
+      "Plant control room (metal, oil, chemicals, paper)"
+    ],
+    "941": [
+      "Opérateur de machines en usine (métal, plastique, bois, aliments…)",
+      "Machine operator in a plant (metal, plastics, wood, food…)"
+    ],
+    "9410": [
+      "Métaux, verre, béton, pierre, fonderie",
+      "Metal, glass, concrete, stone, foundry"
+    ],
+    "9411": [
+      "Chimie, plastique, caoutchouc",
+      "Chemicals, plastics, rubber"
+    ],
+    "9412": [
+      "Scierie, pâtes et papiers, bois",
+      "Sawmill, pulp and paper, wood"
+    ],
+    "9413": [
+      "Textile, couture industrielle, cuir, fourrure",
+      "Textiles, industrial sewing, leather, fur"
+    ],
+    "9414": [
+      "Aliments et boissons, abattoir, poissonnerie industrielle",
+      "Food and beverage, slaughterhouse, fish plant"
+    ],
+    "9415": [
+      "Imprimerie, reliure, prépresse",
+      "Printing, binding, prepress"
+    ],
+    "942": [
+      "Assembleur ou contrôleur de produits en usine",
+      "Product assembler or inspector in a plant"
+    ],
+    "9420": [
+      "Véhicules, électronique, appareils électriques, mécanique",
+      "Vehicles, electronics, electrical appliances, mechanical"
+    ],
+    "9421": [
+      "Meubles, bois, plastique, peinture industrielle, autres produits",
+      "Furniture, wood, plastics, industrial painting, other products"
+    ]
+  },
+  "majors": {
+    "10": {
+      "fr": "directeur financier, directeur des RH, directeur marketing",
+      "en": "finance manager, HR manager, marketing manager"
+    },
+    "11": {
+      "fr": "comptable, analyste financier, conseiller en RH",
+      "en": "accountant, financial analyst, HR advisor"
+    },
+    "12": {
+      "fr": "assistant de direction, agent de recrutement, technicien comptable",
+      "en": "executive assistant, recruiter, bookkeeper"
+    },
+    "13": {
+      "fr": "adjoint administratif, secrétaire médicale, responsable de la paie",
+      "en": "administrative assistant, medical secretary, payroll officer"
+    },
+    "14": {
+      "fr": "réceptionniste, commis de bureau, magasinier",
+      "en": "receptionist, office clerk, shipper and receiver"
+    },
+    "20": {
+      "fr": "directeur de l'ingénierie, directeur informatique",
+      "en": "engineering manager, IT manager"
+    },
+    "21": {
+      "fr": "ingénieur, développeur de logiciels, architecte",
+      "en": "engineer, software developer, architect"
+    },
+    "22": {
+      "fr": "technicien en informatique, dessinateur, technicien de laboratoire",
+      "en": "IT technician, drafter, lab technician"
+    },
+    "30": {
+      "fr": "directeur d'hôpital, chef des soins infirmiers",
+      "en": "hospital director, director of nursing"
+    },
+    "31": {
+      "fr": "médecin, infirmière, pharmacien, physiothérapeute",
+      "en": "doctor, nurse, pharmacist, physiotherapist"
+    },
+    "32": {
+      "fr": "infirmière auxiliaire, ambulancier, technicien en radiologie, massothérapeute",
+      "en": "practical nurse, paramedic, X-ray technician, massage therapist"
+    },
+    "33": {
+      "fr": "préposé aux bénéficiaires, aide dentaire, assistant en pharmacie",
+      "en": "personal support worker, dental assistant, pharmacy assistant"
+    },
+    "40": {
+      "fr": "directeur d'école, gestionnaire au gouvernement, chef de police",
+      "en": "school principal, government manager, police chief"
+    },
+    "41": {
+      "fr": "enseignant, avocat, travailleur social, professeur",
+      "en": "teacher, lawyer, social worker, professor"
+    },
+    "42": {
+      "fr": "éducatrice de la petite enfance, policier, pompier, parajuriste",
+      "en": "early childhood educator, police officer, firefighter, paralegal"
+    },
+    "43": {
+      "fr": "aide-enseignant, agent correctionnel, agent des services frontaliers",
+      "en": "teacher assistant, correctional officer, border services officer"
+    },
+    "44": {
+      "fr": "gardienne d'enfants, aide familiale, préposé aux soins à domicile",
+      "en": "nanny, caregiver, home support worker"
+    },
+    "45": {
+      "fr": "surveillant d'élèves, brigadier scolaire",
+      "en": "student monitor, crossing guard"
+    },
+    "50": {
+      "fr": "directeur de musée, producteur de spectacles, directeur de centre sportif",
+      "en": "museum director, show producer, sports centre director"
+    },
+    "51": {
+      "fr": "journaliste, traducteur, bibliothécaire, musicien",
+      "en": "journalist, translator, librarian, musician"
+    },
+    "52": {
+      "fr": "graphiste, designer d'intérieur, technicien de son, caméraman",
+      "en": "graphic designer, interior designer, sound technician, camera operator"
+    },
+    "53": {
+      "fr": "photographe, acteur, danseur, entraîneur sportif",
+      "en": "photographer, actor, dancer, sports coach"
+    },
+    "54": {
+      "fr": "préposé à l'équipement sportif, marqueur",
+      "en": "sports equipment attendant, scorekeeper"
+    },
+    "55": {
+      "fr": "ouvreur de théâtre, figurant, aide de scène",
+      "en": "theatre usher, extra, stagehand"
+    },
+    "60": {
+      "fr": "gérant de magasin, gérant de restaurant, directeur d'hôtel",
+      "en": "store manager, restaurant manager, hotel manager"
+    },
+    "62": {
+      "fr": "superviseur de magasin, chef cuisinier, acheteur",
+      "en": "store supervisor, chef, buyer"
+    },
+    "63": {
+      "fr": "cuisinier, coiffeur, boulanger, agent immobilier",
+      "en": "cook, hairstylist, baker, real estate agent"
+    },
+    "64": {
+      "fr": "vendeur en magasin, barman, agent de bord, agent de sécurité",
+      "en": "retail salesperson, bartender, flight attendant, security guard"
+    },
+    "65": {
+      "fr": "caissier, serveur, aide de cuisine, femme de ménage",
+      "en": "cashier, server, kitchen helper, cleaner"
+    },
+    "70": {
+      "fr": "directeur de chantier, entrepreneur en rénovation, directeur des transports",
+      "en": "construction manager, renovation contractor, transportation manager"
+    },
+    "72": {
+      "fr": "électricien, plombier, mécanicien, soudeur, pilote",
+      "en": "electrician, plumber, mechanic, welder, pilot"
+    },
+    "73": {
+      "fr": "chauffeur de camion, peintre en bâtiment, couvreur, conducteur d'engins",
+      "en": "truck driver, house painter, roofer, heavy equipment operator"
+    },
+    "74": {
+      "fr": "facteur, coursier, matelot, installateur de pneus",
+      "en": "letter carrier, courier, deckhand, tire installer"
+    },
+    "75": {
+      "fr": "manutentionnaire, aide de chantier, chauffeur-livreur, chauffeur de taxi",
+      "en": "material handler, construction helper, delivery driver, taxi driver"
+    },
+    "80": {
+      "fr": "exploitant agricole, gestionnaire de serre, directeur de mine",
+      "en": "farmer, greenhouse manager, mine manager"
+    },
+    "82": {
+      "fr": "contremaître agricole, contremaître de chantier forestier ou minier",
+      "en": "farm supervisor, logging or mining supervisor"
+    },
+    "83": {
+      "fr": "mineur, foreur de puits, pêcheur",
+      "en": "miner, well driller, fisher"
+    },
+    "84": {
+      "fr": "ouvrier d'élevage, bûcheron, matelot de pêche",
+      "en": "livestock worker, logger, fishing deckhand"
+    },
+    "85": {
+      "fr": "ouvrier agricole, cueilleur, ouvrier de serre, paysagiste",
+      "en": "farm labourer, harvester, greenhouse worker, landscaping labourer"
+    },
+    "90": {
+      "fr": "directeur d'usine, directeur de centrale électrique",
+      "en": "plant manager, utilities manager"
+    },
+    "92": {
+      "fr": "contremaître d'usine, opérateur de centrale, opérateur d'usine de traitement d'eau",
+      "en": "factory supervisor, power plant operator, water treatment operator"
+    },
+    "93": {
+      "fr": "opérateur de salle de contrôle, monteur d'aéronefs",
+      "en": "control room operator, aircraft assembler"
+    },
+    "94": {
+      "fr": "opérateur de machine, assembleur, couturière industrielle, contrôleur de qualité",
+      "en": "machine operator, assembler, industrial sewer, quality inspector"
+    },
+    "95": {
+      "fr": "manœuvre d'usine, emballeur, manutentionnaire de production",
+      "en": "factory labourer, packer, production helper"
+    }
+  }
+}
