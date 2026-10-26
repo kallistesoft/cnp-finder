@@ -45,7 +45,11 @@ export function buildContent() {
     const steps = [];
     for (let c = code; c !== null; c = questions.get(c).parent) {
       const q = questions.get(c);
-      if (q.via) steps.unshift({ question: q.parent, label: both((lang) => shortLabel(q.via, lang)) });
+      if (q.via) {
+        // The field of work keeps its emoji, so the first answer is recognized at a glance.
+        const icon = q.via.code.length === 1 ? labels.domains[q.via.code]?.icon ?? null : null;
+        steps.unshift({ question: q.parent, label: both((lang) => shortLabel(q.via, lang)), icon });
+      }
     }
     return steps;
   };
@@ -138,7 +142,7 @@ export function buildContent() {
       exclusions: both(exclusions),
       trail: [
         ...trail(r.parent),
-        { question: r.parent, label: both((lang) => (shortExamples(n, lang, 1)[0] ? cap(shortExamples(n, lang, 1)[0]) : n.title[lang])) },
+        { question: r.parent, label: both((lang) => (shortExamples(n, lang, 1)[0] ? cap(shortExamples(n, lang, 1)[0]) : n.title[lang])), icon: null },
       ],
     };
   });
