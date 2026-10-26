@@ -5,7 +5,8 @@
 // Run: node tools/build.mjs
 import { writeFileSync, mkdirSync, rmSync, cpSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { loadTree, optionLabel, shortExamples, parseExclusion, LANGS } from "./tree.mjs";
+import { LANGS } from "./tree.mjs";
+import { buildContent } from "./content.mjs";
 
 // Kept out of search engines until the user decides to publish it.
 const NOINDEX = true;
@@ -104,43 +105,12 @@ const esc = (s) => String(s)
 const hash = (f) => createHash("sha1").update(readFileSync(new URL(f, root))).digest("hex").slice(0, 8);
 const ASSET_V = { css: hash("css/style.css"), js: hash("js/copy.js") };
 
-const tree = loadTree();
-const { questions, results, labels, isLeaf, nodes } = tree;
-
-/** The page a code leads to: its result, or the question it settles on. */
-function pageOf(code) {
-  if (results.has(code)) return code;
-  let n = nodes.get(code);
-  if (!n) return null;
-  while (n.children.length === 1) n = n.children[0];
-  return questions.has(n.code) || results.has(n.code) ? n.code : null;
-}
+const { questions, results } = buildContent();
 const href = (lang, code) => `/${lang}/${code ? code + "/" : ""}`;
 
 function questionText(q, lang) {
   const t = T[lang];
-  if (q.node.code === "") return { title: t.qDomain };
-  if (q.options.every((o) => isLeaf(o.target))) return { title: t.qJob };
-  if (q.options.every((o) => o.child.code.length === 2)) return { title: t.qLevel, help: t.qLevelHelp };
-  return { title: t.qGroup };
-}
-
-/** The answers that led to a page, each linking back to its question. */
-function trail(parentCode, lang) {
-  const steps = [];
-  for (let code = parentCode; code !== null; code = questions.get(code).parent) {
-    const q = questions.get(code);
-    if (q.via) steps.unshift({ question: q.parent, label: shortLabel(q.via, lang) });
-  }
-  return steps;
-}
-/** Breadcrumbs use the short form of the education level. */
-function shortLabel(child, lang) {
-  return child.code.length === 2 ? labels.teer[child.code[1]][`short_${lang}`] : plainLabel(child, lang);
-}
-function plainLabel(child, lang) {
-  const label = optionLabel(child, labels, lang);
-  return label ?? child.title[lang];
+  return { domain: { title: t.qDomain }, job: { title: t.qJob }, level: { title: t.qLevel, help: t.qLevelHelp }, group: { title: t.qGroup } }[q.kind];
 }
 
 function layout({ lang, path, title, body, bodyClass = "" }) {
@@ -179,62 +149,44 @@ function progress(step, total, lang) {
 function crumbs(steps, lang) {
   if (!steps.length) return "";
   return `<nav class="trail" aria-label="${esc(T[lang].yourPath)}"><span>${esc(T[lang].yourPath + (lang === "fr" ? " :" : ":"))}</span><ol>${steps
-    .map((s) => `<li><a href="${href(lang, s.question)}">${esc(s.label)}</a></li>`)
+    .map((s) => `<li><a href="${href(lang, s.question)}">${esc(s.label[lang])}</a></li>`)
     .join("")}</ol></nav>`;
 }
 
 function optionCard(o, lang) {
   const t = T[lang];
-  const target = o.target;
-  const link = href(lang, target.code);
-  // Education level: the same kind of sentence for every option of the
-  // question, even when it leads straight to a code.
-  if (o.child.code.length === 2) {
-    const more = leafTitles(target, lang);
-    return `<li class="option">
-  <a href="${link}"><strong>${esc(plainLabel(o.child, lang))}</strong><small>${esc(cap(labels.majors[o.child.code][lang]))}…</small></a>
-  ${more.length > 1 ? `<details><summary>${esc(t.more)}</summary><p>${esc(more.join(" · "))}</p></details>` : ""}
+  const link = href(lang, o.target);
+  const more = o.more[lang].length ? `<details><summary>${esc(t.more)}</summary><p>${esc(o.more[lang].join(" · "))}</p></details>` : "";
+  switch (o.style) {
+    case "level":
+      return `<li class="option">
+  <a href="${link}"><strong>${esc(o.label[lang])}</strong><small>${esc(o.hint[lang])}</small></a>
+  ${more}
+</li>`;
+    case "job":
+      return `<li class="option job">
+  <a href="${link}"><strong>${esc(o.label[lang])}</strong>${o.hint[lang].length ? `<small>${esc(t.forExample)} ${esc(o.hint[lang].join(", "))}</small>` : ""}</a>
+  ${more}
+</li>`;
+    case "domain":
+      return `<li class="option domain">
+  <a href="${link}"><span class="icon" aria-hidden="true">${o.icon}</span><strong>${esc(o.label[lang])}</strong><small>${esc(o.hint[lang])}</small></a>
+</li>`;
+    default:
+      return `<li class="option">
+  <a href="${link}"><strong>${esc(o.label[lang])}</strong></a>
+  ${more}
 </li>`;
   }
-  if (isLeaf(target)) {
-    // Examples that only repeat the title (« cuisinier » under Cooks) add nothing.
-    const title = target.title[lang].toLowerCase();
-    const all = shortExamples(target, lang, 40);
-    const ex = all.filter((e) => !title.startsWith(e.toLowerCase().split(/[/ ]/)[0])).slice(0, 3);
-    return `<li class="option job">
-  <a href="${link}"><strong>${esc(target.title[lang])}</strong>${ex.length ? `<small>${esc(t.forExample)} ${esc(ex.join(", "))}</small>` : ""}</a>
-  ${all.length > ex.length ? `<details><summary>${esc(t.more)}</summary><p>${esc(all.join(" · "))}</p></details>` : ""}
-</li>`;
-  }
-  const domain = o.child.code.length === 1 ? labels.domains[o.child.code] : null;
-  if (domain) {
-    return `<li class="option domain">
-  <a href="${link}"><span class="icon" aria-hidden="true">${domain.icon}</span><strong>${esc(plainLabel(o.child, lang))}</strong><small>${esc(cap(domain[`hint_${lang}`]))}…</small></a>
-</li>`;
-  }
-  // A group: its plain label already names familiar jobs.
-  return `<li class="option">
-  <a href="${link}"><strong>${esc(plainLabel(o.child, lang))}</strong></a>
-  <details><summary>${esc(t.more)}</summary><p>${esc(leafTitles(target, lang).join(" · "))}</p></details>
-</li>`;
-}
-const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-
-/** The official names of the jobs a group holds. */
-function leafTitles(node, lang) {
-  const titles = [];
-  const collect = (x) => (x.children.length ? x.children.forEach(collect) : titles.push(x.title[lang]));
-  collect(node);
-  return titles;
 }
 
-function questionPage(code, q, lang) {
+function questionPage(q, lang) {
   const t = T[lang];
+  const { code } = q;
   const { title, help } = questionText(q, lang);
-  const steps = trail(code, lang);
   const back = q.parent === null ? "/" : href(lang, q.parent);
   const body = `${progress(q.step, q.total, lang)}
-${crumbs(steps, lang)}
+${crumbs(q.trail, lang)}
 <h1>${esc(title)}</h1>
 ${help ? `<p class="help">${esc(help)}</p>` : ""}
 <ul class="options${code === "" ? " grid" : ""}">
@@ -245,36 +197,28 @@ ${q.options.map((o) => optionCard(o, lang)).join("\n")}
   return layout({ lang, path: code ? code + "/" : "", title: `${title} · ${t.name}`, body });
 }
 
-function resultPage(code, r, lang) {
+function resultPage(r, lang) {
   const t = T[lang];
-  const n = r.node;
-  const el = n.elements[lang] ?? { examples: [], duties: [], requirements: [], exclusions: [] };
-  // The first duty line only announces the list (« Ce groupe exerce… »).
-  const duties = el.duties.filter((d) => !/:\s*$/.test(d)).slice(0, 5).map((d) => cap(d.replace(/[;.]\s*$/, "")));
-  const steps = [...trail(r.parent, lang), { question: r.parent, label: shortExamples(n, lang, 1)[0] ? cap(shortExamples(n, lang, 1)[0]) : n.title[lang] }];
-  const exclusions = el.exclusions
-    .map(parseExclusion)
-    .map((x) => ({ ...x, page: x.code ? pageOf(x.code) : null }))
-    .filter((x) => x.page && x.page !== code);
-  const seen = new Set();
-  const uniqueEx = exclusions.filter((x) => (seen.has(x.text) ? false : seen.add(x.text)));
-  const body = `${crumbs(steps, lang)}
+  const { code } = r;
+  const duties = r.duties[lang];
+  const exclusions = r.exclusions[lang];
+  const body = `${crumbs(r.trail, lang)}
 <section class="result">
   <p class="eyebrow">${esc(t.yourCode)}</p>
   <p class="code"><span id="code">${esc(code)}</span> <button type="button" class="copy" data-copy="${esc(code)}" data-done="${esc(t.copied)}">${esc(t.copy)}</button></p>
-  <h1>${esc(n.title[lang])}</h1>
+  <h1>${esc(r.title[lang])}</h1>
   <p class="what">${esc(t.what)}</p>
-  <p class="teer"><strong>${esc(t.level)} ${esc(code[1])}</strong>${lang === "fr" ? "&nbsp;:" : ":"} ${esc(t.teer[code[1]])}</p>
+  <p class="teer"><strong>${esc(t.level)} ${esc(r.teer)}</strong>${lang === "fr" ? "&nbsp;:" : ":"} ${esc(t.teer[r.teer])}</p>
 </section>
-${n.definition[lang] ? `<p class="definition">${esc(n.definition[lang])}</p>` : ""}
+${r.definition[lang] ? `<p class="definition">${esc(r.definition[lang])}</p>` : ""}
 ${duties.length ? `<h2>${esc(t.duties)}</h2><ul class="list">${duties.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>` : ""}
-${el.examples.length ? `<h2>${esc(t.examples)}</h2><p class="examples">${esc(el.examples.join(" · "))}</p>` : ""}
-${uniqueEx.length ? `<section class="notthis"><h2>${esc(t.notThis)}</h2><p>${esc(t.notThisText)}</p><ul>${uniqueEx
-    .map((x) => `<li><a href="${href(lang, x.page)}">${esc(x.text)}</a> <small>${results.has(x.page) ? `${esc(t.seeCode)} ${esc(x.page)}` : esc(t.seeGroup)}</small></li>`)
+${r.examples[lang].length ? `<h2>${esc(t.examples)}</h2><p class="examples">${esc(r.examples[lang].join(" · "))}</p>` : ""}
+${exclusions.length ? `<section class="notthis"><h2>${esc(t.notThis)}</h2><p>${esc(t.notThisText)}</p><ul>${exclusions
+    .map((x) => `<li><a href="${href(lang, x.page)}">${esc(x.text)}</a> <small>${x.isResult ? `${esc(t.seeCode)} ${esc(x.page)}` : esc(t.seeGroup)}</small></li>`)
     .join("")}</ul></section>` : ""}
-${el.requirements.length ? `<details class="req"><summary>${esc(t.requirements)}</summary><ul class="list">${el.requirements.map((d) => `<li>${esc(d)}</li>`).join("")}</ul></details>` : ""}
+${r.requirements[lang].length ? `<details class="req"><summary>${esc(t.requirements)}</summary><ul class="list">${r.requirements[lang].map((d) => `<li>${esc(d)}</li>`).join("")}</ul></details>` : ""}
 <p class="nav"><a class="button ghost" href="${href(lang, r.parent)}">${esc(t.back)}</a> <a class="button" href="${href(lang, "")}">${esc(t.restart)}</a></p>`;
-  return layout({ lang, path: code + "/", title: `${code} ${n.title[lang]} · ${t.name}`, body, bodyClass: "is-result" });
+  return layout({ lang, path: code + "/", title: `${code} ${r.title[lang]} · ${t.name}`, body, bodyClass: "is-result" });
 }
 
 function home() {
@@ -320,7 +264,7 @@ write("index.html", home());
 const counts = {};
 for (const lang of LANGS) {
   counts[lang] = 0;
-  for (const [code, q] of questions) { write(`${lang}/${code ? code + "/" : ""}index.html`, questionPage(code, q, lang)); counts[lang]++; }
-  for (const [code, r] of results) { write(`${lang}/${code}/index.html`, resultPage(code, r, lang)); counts[lang]++; }
+  for (const q of questions) { write(`${lang}/${q.code ? q.code + "/" : ""}index.html`, questionPage(q, lang)); counts[lang]++; }
+  for (const r of results) { write(`${lang}/${r.code}/index.html`, resultPage(r, lang)); counts[lang]++; }
 }
-console.log(`site/: ${questions.size} questions + ${results.size} results per language`, counts);
+console.log(`site/: ${questions.length} questions + ${results.length} results per language`, counts);
