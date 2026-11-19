@@ -58,15 +58,19 @@ const walk = (dir) => {
 if (!existsSync("site")) fail.push("site/ is missing: run node tools/build.mjs first");
 else {
   walk("site");
-  check(pages.length === 1 + 2 * (questions.size + results.size), `unexpected page count ${pages.length}`);
+  // The root, then per language: home, search, compare, my codes, settings, every question and result.
+  check(pages.length === 1 + 2 * (5 + questions.size + results.size), `unexpected page count ${pages.length}`);
+  for (const lang of LANGS) for (const screen of ["", "questions/", "search/", "compare/", "saved/", "settings/"]) check(existsSync(`site/${lang}/${screen}index.html`), `no ${lang}/${screen} page`);
+  for (const code of ["63200", "21232"]) check(existsSync(`site/data/${code}.json`), `no data/${code}.json`);
   for (const p of pages) {
     const html = readFileSync(p, "utf8");
     for (const [, href] of html.matchAll(/href="(\/[^"?#]*)/g)) {
       const target = href.endsWith("/") ? `site${href}index.html` : `site${href}`;
       check(existsSync(target), `${p}: dead link ${href}`);
     }
-    const m = p.match(/^site\/(fr|en)\/(\d*)\/?index\.html$/);
-    if (m && !(m[2].length === 5)) {
+    // Home and the questions (results and the comparison show the official TEER on purpose).
+    const m = p.match(/^site\/(fr|en)\/(\d{0,4}\/|questions\/)?index\.html$/);
+    if (m) {
       const main = html.slice(html.indexOf("<main>"), html.indexOf("</main>")).replace(/<small>.*?<\/small>/gs, "");
       const hit = main.match(JARGON[m[1]]);
       check(!hit, `${p}: jargon « ${hit?.[0]} »`);
