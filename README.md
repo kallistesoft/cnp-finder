@@ -16,8 +16,17 @@ Live: https://cnp.kallistesoft.ca (noindex for now: `NOINDEX` in `tools/build.mj
   skipped, so every question offers a real choice.
 - The questions are: field of work → what the job requires (education level, the
   FEER/TEER) → one or two narrower groups → the job itself.
-- `tools/build.mjs` writes one static page per question and per code into `site/`:
-  `/fr/<code>/` and `/en/<code>/`, same codes in both languages.
+- `tools/build.mjs` writes the same screens as the Android app
+  ([kallistesoft/cnp-android](https://github.com/kallistesoft/cnp-android)), in its
+  "Nocturne" look, into `site/`: home `/fr/`, the first question `/fr/questions/`,
+  one static page per question and per code `/fr/<code>/`, and the screens the
+  browser draws from `site/data/` (look up a code `/fr/search/`, compare two codes
+  `/fr/compare/?a=…&b=…`, my codes `/fr/saved/`, settings `/fr/settings/`). Same
+  paths in English under `/en/`; `/` sends visitors to their language.
+- `js/app.js` adds what static pages can't: back like the app, the examples
+  toggle, copy / share / save a code, and those four screens. Saved codes and the
+  chosen language stay in the browser (`localStorage`). Unlike the app, every code
+  is free on the website.
 - `tools/check.mjs` fails if a code is unreachable or reachable twice, a question
   has fewer than 2 choices, a path has more than 5 questions, a plain label is
   missing, a link is dead or StatCan jargon shows up on a question page.
