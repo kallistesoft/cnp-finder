@@ -332,7 +332,7 @@ function resultPage(r, lang) {
 <section class="card codecard">
 <p class="eyebrow">${esc(t.yourCode)}</p>
 <p class="code">${esc(code)}</p>
-<h1 class="title-l">${esc(r.title[lang])}</h1>
+<h1 class="title-l">${esc(r.title[lang]).replace(/\//g, "/<wbr>")}</h1>
 <p class="what">${esc(t.what)}</p>
 <p class="teer">${esc(t.teerLine(r.teer, t.teer[r.teer]))}</p>
 <div class="small-btns"><button type="button" class="btn small" data-copy="${code}">${esc(t.copy)}</button><button type="button" class="btn small" data-share="${esc(t.shareText(code, r.title[lang]))}">${esc(t.share)}</button><button type="button" class="btn small" data-save="${code}">${esc(t.save)}</button></div>

@@ -120,7 +120,7 @@
     const a = el("a", "card pick");
     a.href = link;
     if (replace) a.dataset.replace = "";
-    a.append(el("span", "mono", entry.c), el("span", "title-m", entry.t[lang]));
+    a.append(el("span", "mono", entry.c), el("span", "title-m", entry.t[lang].replace(/\//g, "/\u200b")));
     return a;
   }
 
@@ -183,7 +183,7 @@
         const row = el("div", "card saved-item");
         const a = el("a");
         a.href = codeHref(c.c);
-        a.append(el("span", "mono", c.c), el("span", "title-m", c.t[lang]));
+        a.append(el("span", "mono", c.c), el("span", "title-m", c.t[lang].replace(/\//g, "/\u200b")));
         const remove = el("button", "icon-btn");
         remove.type = "button";
         remove.setAttribute("aria-label", t.savedRemove.replace("{title}", c.t[lang]));
