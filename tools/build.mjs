@@ -16,6 +16,9 @@ import { buildContent } from "./content.mjs";
 
 // Kept out of search engines until the user decides to publish it.
 const NOINDEX = true;
+// Anonymous visit statistics (js/track.js): the KallisteSoft endpoint, and a Google Analytics ID (off while empty).
+const STATS_URL = "https://kallistesoft.ca/hit.php";
+const GA_ID = "";
 
 const root = new URL("../", import.meta.url);
 const out = new URL("site/", root);
@@ -82,7 +85,9 @@ const T = {
     settingsAbout: "À propos",
     settingsDisclaimer: "Ce site n'est pas un service officiel du gouvernement du Canada et ne donne pas de conseils en immigration. Vérifiez votre code selon vos tâches réelles, ou auprès d'un avocat ou d'un consultant autorisé.",
     settingsSource: "Source : Statistique Canada, Classification nationale des professions (CNP) 2021 version 1.0. Reproduit et diffusé « tel quel » avec la permission de Statistique Canada, sous la Licence du gouvernement ouvert – Canada.",
-    settingsPrivacy: "Ce site ne collecte rien : vos codes enregistrés et votre langue restent dans ce navigateur.",
+    settingsPrivacy: "Vos codes enregistrés et votre langue restent dans ce navigateur. Le site compte les visites de façon anonyme, sans cookie.",
+    privacy: "Confidentialité",
+    privacyUrl: "https://kallistesoft.ca/confidentialite/",
     searchTitle: "Chercher un code",
     searchCompareTitle: "Comparer avec…",
     searchField: "Code CNP",
@@ -157,7 +162,9 @@ const T = {
     settingsAbout: "About",
     settingsDisclaimer: "This site is not an official Government of Canada service and doesn't give immigration advice. Check your code against your actual duties, or with a lawyer or licensed consultant.",
     settingsSource: "Source: Statistics Canada, National Occupational Classification (NOC) 2021 Version 1.0. Reproduced and distributed on an “as is” basis with the permission of Statistics Canada, under the Open Government Licence – Canada.",
-    settingsPrivacy: "This site collects nothing: your saved codes and your language stay in this browser.",
+    settingsPrivacy: "Your saved codes and your language stay in this browser. The site counts visits anonymously, without cookies.",
+    privacy: "Privacy",
+    privacyUrl: "https://kallistesoft.ca/en/privacy/",
     searchTitle: "Look up a code",
     searchCompareTitle: "Compare with…",
     searchField: "NOC code",
@@ -193,7 +200,7 @@ const esc = (s) => nbsp(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const sha = (s) => createHash("sha1").update(s).digest("hex").slice(0, 8);
 const hash = (f) => sha(readFileSync(new URL(f, root)));
-const ASSET_V = { css: hash("css/style.css"), js: hash("js/app.js") };
+const ASSET_V = { css: hash("css/style.css"), js: hash("js/app.js"), track: hash("js/track.js") };
 
 const { questions, results } = buildContent();
 const href = (lang, code) => (code === "" ? `/${lang}/questions/` : `/${lang}/${code}/`);
@@ -234,9 +241,9 @@ ${NOINDEX ? '<meta name="robots" content="noindex">\n' : ""}<title>${esc(title)}
  * A screen of the app: a top bar with a back arrow (when [back] is a link), the [title] and [actions], then the
  * content in a column no wider than the app's (640 px).
  */
-function layout({ lang, path, page, title, docTitle, back = null, actions = "", body }) {
+function layout({ lang, path, page, title, docTitle, back = null, actions = "", body, track = {} }) {
   const t = T[lang];
-  const cnp = { lang, page, index: `/data/codes.json?v=${DATA_V}`, data: "/data/", t: clientStrings(lang) };
+  const cnp = { lang, page, index: `/data/codes.json?v=${DATA_V}`, data: "/data/", stats: STATS_URL, ga: GA_ID, track, t: clientStrings(lang) };
   return `<!doctype html>
 <html lang="${lang}">
 <head>
@@ -252,6 +259,7 @@ ${body}
 </main>
 <div class="snackbar" role="status" aria-live="polite"></div>
 <script>window.CNP=${JSON.stringify(cnp).replace(/</g, "\\u003c")}</script>
+<script src="/js/track.js?v=${ASSET_V.track}" defer></script>
 <script src="/js/app.js?v=${ASSET_V.js}" defer></script>
 </body>
 </html>
@@ -279,12 +287,12 @@ function trail(steps, lang) {
 const jobsOf = (o, lang) => (o.style === "job" ? o.hint[lang] : o.hint[lang].replace(/…$/, "").split(", ").map((s) => s.trim()).filter(Boolean)).map(cap);
 
 /** One answer: a big card with plain words, and the longer list of jobs on demand. */
-function optionCard(o, lang) {
+function optionCard(o, lang, n) {
   const t = T[lang];
   const jobs = jobsOf(o, lang);
   const more = o.more[lang].map(cap);
   return `<li class="card option">
-<a class="option-link" href="${href(lang, o.target)}">${o.icon ? `<span class="opt-icon" aria-hidden="true">${o.icon}</span>` : ""}<span class="opt-body"><strong>${esc(o.label[lang])}</strong>${o.style === "job" && jobs.length ? `<span class="for-example">${esc(t.forExample)}</span>` : ""}${jobs.length ? `<span class="jobs">${jobs.map((j) => `<span>${esc(j)}</span>`).join("")}</span>` : ""}</span></a>${more.length ? `
+<a class="option-link" href="${href(lang, o.target)}" data-answer="${n}">${o.icon ? `<span class="opt-icon" aria-hidden="true">${o.icon}</span>` : ""}<span class="opt-body"><strong>${esc(o.label[lang])}</strong>${o.style === "job" && jobs.length ? `<span class="for-example">${esc(t.forExample)}</span>` : ""}${jobs.length ? `<span class="jobs">${jobs.map((j) => `<span>${esc(j)}</span>`).join("")}</span>` : ""}</span></a>${more.length ? `
 <div class="more${o.icon ? " indent" : ""}"><button type="button" class="more-btn" aria-expanded="false" data-more="${esc(t.more)}" data-less="${esc(t.less)}"><span>${esc(t.more)}</span>${icon("expand")}</button><span class="jobs small" hidden>${more.map((j) => `<span>${esc(j)}</span>`).join("")}</span></div>` : ""}
 </li>`;
 }
@@ -299,7 +307,7 @@ function questionPage(q, lang) {
 <h1 class="headline">${esc(title)}</h1>
 ${q.kind === "level" ? `<p class="help">${esc(t.qLevelHelp)}</p>` : ""}
 <ul class="options">
-${q.options.map((o) => optionCard(o, lang)).join("\n")}
+${q.options.map((o, i) => optionCard(o, lang, i + 1)).join("\n")}
 </ul>
 <details class="card fold"><summary>${esc(t.unsure)}</summary><p>${esc(t.unsureText)}</p></details>
 <div class="row">${button("tertiary", t.back, back, " data-back")}${q.parent === null ? "" : button("tertiary", t.restart, href(lang, ""))}</div>`;
@@ -312,6 +320,7 @@ ${q.options.map((o) => optionCard(o, lang)).join("\n")}
     back,
     actions: q.parent === null ? "" : restartAction(lang),
     body,
+    track: { step: q.step, question: q.code || "start" },
   });
 }
 
@@ -328,7 +337,7 @@ function resultPage(r, lang) {
 <p class="teer">${esc(t.teerLine(r.teer, t.teer[r.teer]))}</p>
 <div class="small-btns"><button type="button" class="btn small" data-copy="${code}">${esc(t.copy)}</button><button type="button" class="btn small" data-share="${esc(t.shareText(code, r.title[lang]))}">${esc(t.share)}</button><button type="button" class="btn small" data-save="${code}">${esc(t.save)}</button></div>
 </section>
-${button("secondary wide", t.compare, `/${lang}/search/?compare=${code}`)}
+${button("secondary wide", t.compare, `/${lang}/search/?compare=${code}`, ' data-cta="compare"')}
 ${r.definition[lang] ? `<p class="definition">${esc(r.definition[lang])}</p>` : ""}
 ${r.duties[lang].length ? sectionTitle(t.duties) + bullets(r.duties[lang]) : ""}
 ${r.examples[lang].length ? `${sectionTitle(t.examples)}<p class="examples">${esc(r.examples[lang].join(" · "))}</p>` : ""}
@@ -346,6 +355,7 @@ ${r.requirements[lang].length ? `<details class="card fold"><summary>${esc(t.req
     back: href(lang, r.parent),
     actions: restartAction(lang),
     body,
+    track: { result: code, teer: Number(r.teer) },
   });
 }
 
@@ -359,7 +369,7 @@ function homePage(lang) {
 ${button("hero", t.homeStart, href(lang, ""))}
 ${button("secondary wide", t.homeSearch, `/${lang}/search/`)}
 ${button("secondary wide", t.homeSaved, `/${lang}/saved/`)}
-<p class="disclaimer">${esc(t.homeDisclaimer)}</p>
+<p class="disclaimer">${esc(t.homeDisclaimer)} <a href="${t.privacyUrl}">${esc(t.privacy)}</a></p>
 </section>`;
   return layout({
     lang,
@@ -413,7 +423,7 @@ function settingsPage(lang) {
   const body = `${sectionTitle(t.settingsLanguage)}
 <div class="card group">${radios}</div>
 ${sectionTitle(t.settingsAbout)}
-<div class="card group about"><p class="body-m">${esc(t.settingsDisclaimer)}</p><p class="small muted">${esc(t.settingsSource)}</p><p class="small muted">${esc(t.settingsPrivacy)}</p></div>`;
+<div class="card group about"><p class="body-m">${esc(t.settingsDisclaimer)}</p><p class="small muted">${esc(t.settingsSource)}</p><p class="small muted">${esc(t.settingsPrivacy)} <a href="${t.privacyUrl}">${esc(t.privacy)}</a></p></div>`;
   return layout({ lang, path: "settings/", page: "settings", title: t.settingsTitle, back: `/${lang}/`, body });
 }
 

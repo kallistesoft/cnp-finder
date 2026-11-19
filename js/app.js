@@ -11,6 +11,9 @@
     return e;
   };
   const codeHref = (code) => `/${lang}/${code}/`;
+  // Anonymous statistics (js/track.js); `info` is what the page tells about itself (step and group, or code and TEER).
+  const info = window.CNP.track ?? {};
+  const track = (name, params) => { try { window.track?.(name, params); } catch {} };
 
   // Browser storage can be off (private windows, blocked site data): the pages still work, nothing is kept.
   const store = {
@@ -45,7 +48,30 @@
     try { return document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1; } catch { return false; }
   };
 
+  /** Where a result was opened from, by the previous page of this site: never a URL parameter. */
+  function via() {
+    let path;
+    try {
+      const ref = new URL(document.referrer);
+      if (ref.origin !== location.origin) return "direct";
+      path = ref.pathname;
+    } catch { return "direct"; }
+    const screen = path.split("/")[2] ?? "";
+    if (screen === "questions" || /^\d{1,4}$/.test(screen)) return "questions";
+    if (/^\d{5}$/.test(screen)) return "notthis";
+    return { search: "search", saved: "saved", compare: "compare" }[screen] ?? "direct";
+  }
+
   document.addEventListener("click", (e) => {
+    if (page === "question") {
+      const answer = e.target.closest("[data-answer]");
+      if (answer) track("step_answer", { step: info.step, answer: Number(answer.dataset.answer), to: new URL(answer.href).pathname.split("/")[2] });
+      if (e.target.closest("[data-back]")) track("step_back", { step: info.step });
+    }
+    if (page === "result") {
+      const cta = e.target.closest("[data-copy], [data-share], [data-save], [data-cta]");
+      if (cta) track("cta_click", { cta: cta.dataset.cta ?? ["copy", "share", "save"].find((k) => k in cta.dataset), result: info.result });
+    }
     const back = e.target.closest("[data-back]");
     if (back && cameFromHere()) {
       e.preventDefault();
@@ -120,6 +146,12 @@
       for (const c of entries) box.append(pick(c, linkFor(c.c), !!base));
       list.append(box);
     };
+    // One lookup per outcome: a full code typed (found or not), or digits no code starts with. Never the digits.
+    let reported = false;
+    const report = (done, found) => {
+      if (done && !reported) track("search_lookup", { found: found ? 1 : 0 });
+      reported = done;
+    };
     const draw = () => {
       const digits = input.value.replace(/\D/g, "").slice(0, 5);
       if (input.value !== digits) input.value = digits;
@@ -127,10 +159,12 @@
       if (digits) {
         const matches = others([...codes.values()].filter((c) => c.c.startsWith(digits)));
         if (!matches.length) list.append(el("p", "body-m", t.searchNone));
+        report(digits.length === 5 || !matches.length, matches.some((c) => c.c === digits));
         const box = el("div", "codes");
         for (const c of matches) box.append(pick(c, linkFor(c.c), !!base));
         list.append(box);
-      } else if (base) {
+      } else report(false);
+      if (!digits && base) {
         section(t.searchNeighbours, others(base.n.map((c) => codes.get(c))));
         section(t.searchSaved, others(saved.list().map((s) => codes.get(s.code))));
       }
@@ -217,6 +251,7 @@
     nav.append(back, change);
     parts.push(nav);
     root.replaceChildren(...parts);
+    track("compare_view", {});
   }
 
   /** The language: the browser's ("system"), English or French; choosing one opens Settings in it. */
@@ -229,11 +264,19 @@
         const value = radio.value === "system" ? null : radio.value;
         store.set("cnp.lang", value);
         const target = value ?? browser;
+        track("lang_switch", { to: target });
         if (target !== lang) location.replace(`/${target}/settings/`);
       });
     }
   }
 
+  // A screen counts each time it shows, also when Back brings it from the browser's cache without reloading it.
+  const viewed = () => {
+    if (page === "question") track("step_view", { step: info.step, question: info.question });
+    if (page === "result") track("result_view", { result: info.result, teer: info.teer, via: via() });
+  };
+  viewed();
+  addEventListener("pageshow", (e) => { if (e.persisted) viewed(); });
   if (page === "result") document.querySelectorAll("[data-save]").forEach(showSaved);
   if (page === "search") searchScreen();
   if (page === "saved") savedScreen();

@@ -27,6 +27,12 @@ Live: https://cnp.kallistesoft.ca (noindex for now: `NOINDEX` in `tools/build.mj
   toggle, copy / share / save a code, and those four screens. Saved codes and the
   chosen language stay in the browser (`localStorage`). Unlike the app, every code
   is free on the website.
+- `js/track.js` sends anonymous events (`STATS_URL` in `tools/build.mjs`, by
+  `navigator.sendBeacon`): `step_view`, `step_answer`, `step_back`, `result_view`
+  (with `via`: questions, notthis, search, saved, compare or direct), `cta_click`,
+  `search_lookup` (found or not, never the digits), `compare_view`, `lang_switch`.
+  No cookie, no ID, nothing stored. Google Analytics stays off while `GA_ID` is
+  empty; when set, it starts with every consent denied.
 - `tools/check.mjs` fails if a code is unreachable or reachable twice, a question
   has fewer than 2 choices, a path has more than 5 questions, a plain label is
   missing, a link is dead or StatCan jargon shows up on a question page.

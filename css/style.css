@@ -116,6 +116,7 @@ a.card:hover, .option:hover { background: var(--surface-hover); }
 .home { display: flex; flex-direction: column; gap: 16px; padding-top: 24px; }
 .hero-icon { font-size: 45px; line-height: 52px; }
 .disclaimer { font-size: 12px; line-height: 16px; color: var(--muted2); margin-top: 24px; }
+.disclaimer a, .about a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* "Your answers". */
 .trail { padding: 4px 0; margin-bottom: 12px; }
