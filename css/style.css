@@ -57,8 +57,8 @@ button { font: inherit; color: inherit; }
 /* Type: Material 3 sizes in Manrope, extra-bold headings with tight letter spacing (core/designsystem/Type.kt). */
 .headline-m { font-size: 28px; line-height: 36px; font-weight: 800; letter-spacing: -.035em; margin: 0; }
 .headline { font-size: 24px; line-height: 32px; font-weight: 800; letter-spacing: -.035em; margin: 16px 0 8px; }
-.title-l { font-size: 22px; line-height: 28px; font-weight: 800; letter-spacing: -.02em; margin: 0; }
-.title-m { font-size: 16px; line-height: 24px; font-weight: 700; letter-spacing: -.02em; }
+.title-l { font-size: 22px; line-height: 28px; font-weight: 800; letter-spacing: -.02em; margin: 0; overflow-wrap: break-word; }
+.title-m { font-size: 16px; line-height: 24px; font-weight: 700; letter-spacing: -.02em; overflow-wrap: break-word; }
 .body-l { font-size: 16px; line-height: 24px; }
 .body-m { font-size: 14px; line-height: 20px; }
 .small { font-size: 12px; line-height: 16px; }
